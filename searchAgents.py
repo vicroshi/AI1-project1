@@ -315,6 +315,7 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
+        return [self.startingPosition ,()]
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -322,6 +323,13 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
+        # print("state:", state)
+        # if state[0] in self.corners and state[0] not in state[1]:
+        #     lcorn = list(state[1])
+        #     lcorn.append(state[0])
+        #     state[1] = tuple(lcorn)
+            # state[1] 
+        return state[1] == self.corners
         util.raiseNotDefined()
 
     def expand(self, state):
@@ -340,6 +348,15 @@ class CornersProblem(search.SearchProblem):
             # Add a child state to the child list if the action is legal
             # You should call getActions, getActionCost, and getNextState.
             "*** YOUR CODE HERE ***"
+            nextState = self.getNextState(state,action)
+            cost = self.getActionCost(state,action,nextState)
+            if nextState[0] in self.corners and nextState[0] not in nextState[1]:
+                lcorn = list(nextState[1])
+                lcorn.append(nextState[0])
+                nextState[1] = tuple(lcorn)
+                children.insert(0,(nextState,action,cost))
+                continue
+            children.append((nextState,action,cost))
 
         self._expanded += 1 # DO NOT CHANGE
         return children
@@ -367,6 +384,8 @@ class CornersProblem(search.SearchProblem):
         dx, dy = Actions.directionToVector(action)
         nextx, nexty = int(x + dx), int(y + dy)
         "*** YOUR CODE HERE ***"
+       
+        return [(nextx,nexty),state[1]]
         util.raiseNotDefined()
 
     def getCostOfActionSequence(self, actions):
