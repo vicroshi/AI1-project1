@@ -315,7 +315,7 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        return [self.startingPosition ,()]
+        return (self.startingPosition ,())
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -350,12 +350,14 @@ class CornersProblem(search.SearchProblem):
             "*** YOUR CODE HERE ***"
             nextState = self.getNextState(state,action)
             cost = self.getActionCost(state,action,nextState)
-            if nextState[0] in self.corners and nextState[0] not in nextState[1]:
+            """if nextState[0] in self.corners and nextState[0] not in nextState[1]:
                 lcorn = list(nextState[1])
                 lcorn.append(nextState[0])
                 nextState[1] = tuple(lcorn)
                 children.insert(0,(nextState,action,cost))
-                continue
+                continue"""
+            if self.isGoalState(nextState):
+                children.insert(0,(nextState, action,cost))
             children.append((nextState,action,cost))
 
         self._expanded += 1 # DO NOT CHANGE
@@ -373,6 +375,7 @@ class CornersProblem(search.SearchProblem):
         return valid_actions_from_state
 
     def getActionCost(self, state, action, next_state):
+        # print("state:", state ,"next_state: ",next_state)
         assert next_state == self.getNextState(state, action), (
             "Invalid next state passed to getActionCost().")
         return 1
@@ -384,8 +387,12 @@ class CornersProblem(search.SearchProblem):
         dx, dy = Actions.directionToVector(action)
         nextx, nexty = int(x + dx), int(y + dy)
         "*** YOUR CODE HERE ***"
-       
-        return [(nextx,nexty),state[1]]
+        tcorn = state[1]
+        if (nextx,nexty) in self.corners and (nextx,nexty) not in state[1]:
+            lcorn = list(state[1])
+            lcorn.append((nextx,nexty))
+            tcorn = tuple(lcorn)
+        return ((nextx,nexty),tcorn)
         util.raiseNotDefined()
 
     def getCostOfActionSequence(self, actions):
@@ -456,7 +463,9 @@ class FoodSearchProblem:
         for action in self.getActions(state):
             next_state = self.getNextState(state, action)
             action_cost = self.getActionCost(state, action, next_state)
-            children.append( ( next_state, action, action_cost) )
+            # if self.isGoalState(next_state):
+            #     children.insert(0,(next_state, action, action_cost))
+            children.append((next_state, action, action_cost))
         return children
 
     def getActions(self, state):
@@ -471,6 +480,7 @@ class FoodSearchProblem:
         return valid_actions_from_state
 
     def getActionCost(self, state, action, next_state):
+        
         assert next_state == self.getNextState(state, action), (
             "Invalid next state passed to getActionCost().")
         return 1

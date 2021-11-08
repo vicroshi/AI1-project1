@@ -159,12 +159,12 @@ def breadthFirstSearch(problem: SearchProblem):
             while True:
                 if parent == start:
                     return pathActions
-                path_state = path.pop(tuple(parent))
+                path_state = path.pop(parent)
                 parent = path_state[0]
                 pathActions.insert(0,path_state[1])
-        if tuple(node[0]) not in expanded:
+        if node[0] not in expanded:
             children_states = problem.expand(node[0])
-            expanded.add(tuple(node[0]))
+            expanded.add(node[0])
             for child in children_states:
                 """if problem.isGoalState(child[0]):
                     pathActions.insert(0,child[1])
@@ -176,7 +176,7 @@ def breadthFirstSearch(problem: SearchProblem):
                         parent = path_state[0]
                         pathActions.insert(0,path_state[1])"""
                 frontier.push((child[0],node[0],child[1]))
-                path[tuple(node[0])] = (node[1],node[2])
+                path[node[0]] = (node[1],node[2])
     return []
     util.raiseNotDefined()
 
