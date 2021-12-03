@@ -120,24 +120,16 @@ def depthFirstSearch(problem: SearchProblem):
     expanded = set()
     node = (start,None,None)
     frontier.push(node)
-    # path = {}
     pathActions = []
     while not frontier.isEmpty():
         node = frontier.pop()
         if problem.isGoalState(node[0]):
-            # pathActions.insert(0,node[2])
             parent = node[1]
             while parent != None:
                 pathActions.insert(0,node[2])
                 node = parent
                 parent = node[1]
             return pathActions
-            # while True:
-            #     if parent == start:
-            #         return pathActions
-            #     path_state = path.pop(parent)
-            #     parent = path_state[0]
-            #     pathActions.insert(0,path_state[1])
         if node[0] not in expanded:
             children_states = problem.expand(node[0])
             expanded.add(node[0])
@@ -168,15 +160,6 @@ def breadthFirstSearch(problem: SearchProblem):
             children_states = problem.expand(node[0])
             expanded.add(node[0])
             for child in children_states:
-                """if problem.isGoalState(child[0]):
-                    pathActions.insert(0,child[1])
-                    parent = node[0]
-                    while True:
-                        if parent == start:
-                            return pathActions
-                        path_state = path.pop(tuple(parent))
-                        parent = path_state[0]
-                        pathActions.insert(0,path_state[1])"""
                 frontier.push((child[0],node,child[1]))
     return None
     util.raiseNotDefined()
@@ -196,7 +179,6 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     frontier = util.PriorityQueue()
     expanded = set()
     node = (start,None,None,0)
-    # print(node)
     frontier.push(node,0)
     pathActions = []
     while not frontier.isEmpty():
@@ -216,12 +198,6 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
                     child_node = (child[0],node,child[1],node[3]+child[2])
                     f = child_node[3] + heuristic(child[0],problem)
                     frontier.push(child_node,f)
-                #     parent = node
-                #     while parent != None:
-                #         pathActions.insert(0,child_node[2])
-                #         child_node = parent
-                #         parent = child_node[1]
-                #     return pathActions
     return pathActions
     util.raiseNotDefined()
 

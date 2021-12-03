@@ -323,13 +323,6 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        # print("state:", state)
-        # if state[0] in self.corners and state[0] not in state[1]:
-        #     lcorn = list(state[1])
-        #     lcorn.append(state[0])
-        #     state[1] = tuple(lcorn)
-            # state[1] 
-        # print(len(state[1]))
         return len(state[1]) == len(self.corners)
         util.raiseNotDefined()
 
@@ -343,7 +336,6 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that child
         """
-
         children = []
         for action in self.getActions(state):
             # Add a child state to the child list if the action is legal
@@ -351,14 +343,7 @@ class CornersProblem(search.SearchProblem):
             "*** YOUR CODE HERE ***"
             nextState = self.getNextState(state,action)
             cost = self.getActionCost(state,action,nextState)
-            """if nextState[0] in self.corners and nextState[0] not in nextState[1]:
-                lcorn = list(nextState[1])
-                lcorn.append(nextState[0])
-                nextState[1] = tuple(lcorn)
-                children.insert(0,(nextState,action,cost))
-                continue"""
             children.append((nextState,action,cost))
-
         self._expanded += 1 # DO NOT CHANGE
         return children
 
@@ -374,7 +359,6 @@ class CornersProblem(search.SearchProblem):
         return valid_actions_from_state
 
     def getActionCost(self, state, action, next_state):
-        # print("state:", state ,"next_state: ",next_state)
         assert next_state == self.getNextState(state, action), (
             "Invalid next state passed to getActionCost().")
         return 1
@@ -390,6 +374,7 @@ class CornersProblem(search.SearchProblem):
         if (nextx,nexty) in self.corners and (nextx,nexty) not in state[1]:
             lcorn = list(state[1])
             lcorn.append((nextx,nexty))
+            lcorn.sort()
             tcorn = tuple(lcorn)
         return ((nextx,nexty),tcorn)
         util.raiseNotDefined()
@@ -433,14 +418,6 @@ def cornersHeuristic(state, problem):
     for c in corners:
         if c not in state[1]:
             dist.append(util.manhattanDistance(state[0],c))
-            # unvisited_corners.append(c)
-    # print(unvisited_corners)
-    # print(state)
-    # for uc in unvisited_corners:
-    # print("unvisited_corners:",unvisited_corners)
-    # print("state:",state)
-    # print("manhatanDistances:",dist)
-    # print("max dist:",max(dist))
     return max(dist)
 
 class AStarCornersAgent(SearchAgent):
